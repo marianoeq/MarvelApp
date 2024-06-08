@@ -12,30 +12,19 @@
 
 import UIKit
 
-protocol MarvelDataBusinessLogic
-{
-  func doSomething(request: MarvelData.Something.Request)
+protocol MarvelDataBusinessLogic {
+
 }
 
-protocol MarvelDataDataStore
-{
+protocol MarvelDataDataStore {
   //var name: String { get set }
 }
 
-class MarvelDataInteractor: MarvelDataBusinessLogic, MarvelDataDataStore
-{
+class MarvelDataInteractor: MarvelDataBusinessLogic, MarvelDataDataStore {
   var presenter: MarvelDataPresentationLogic?
   var worker: MarvelDataWorker?
   //var name: String = ""
   
   // MARK: Do something
   
-  func doSomething(request: MarvelData.Something.Request)
-  {
-    worker = MarvelDataWorker()
-    worker?.doSomeWork()
-    
-    let response = MarvelData.Something.Response()
-    presenter?.presentSomething(response: response)
-  }
 }

@@ -12,20 +12,15 @@
 
 import UIKit
 
-protocol MarvelDataPresentationLogic
-{
-  func presentSomething(response: MarvelData.Something.Response)
+protocol MarvelDataPresentationLogic {
+
 }
 
-class MarvelDataPresenter: MarvelDataPresentationLogic
-{
+class MarvelDataPresenter: MarvelDataPresentationLogic {
+
   weak var viewController: MarvelDataDisplayLogic?
   
   // MARK: Do something
   
-  func presentSomething(response: MarvelData.Something.Response)
-  {
-    let viewModel = MarvelData.Something.ViewModel()
-    viewController?.displaySomething(viewModel: viewModel)
-  }
+
 }
