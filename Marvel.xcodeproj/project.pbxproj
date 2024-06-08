@@ -48,7 +48,6 @@
 		D5AD5A312C1476700021C270 = {
 			isa = PBXGroup;
 			children = (
-				D5AD5A512C1476900021C270 /* Scenes */,
 				D5AD5A3C2C1476700021C270 /* Marvel */,
 				D5AD5A3B2C1476700021C270 /* Products */,
 			);
@@ -65,6 +64,7 @@
 		D5AD5A3C2C1476700021C270 /* Marvel */ = {
 			isa = PBXGroup;
 			children = (
+				D5AD5A512C1476900021C270 /* Scenes */,
 				D5AD5A3D2C1476700021C270 /* AppDelegate.swift */,
 				D5AD5A432C1476710021C270 /* Main.storyboard */,
 				D5AD5A462C1476740021C270 /* Assets.xcassets */,
