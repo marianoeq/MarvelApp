@@ -13,14 +13,50 @@
 import UIKit
 
 protocol MarvelDataPresentationLogic {
-
+  func presentData(response: MarvelData.Characters.Response)
 }
 
 class MarvelDataPresenter: MarvelDataPresentationLogic {
 
   weak var viewController: MarvelDataDisplayLogic?
-  
-  // MARK: Do something
-  
 
+  func presentData(response: MarvelData.Characters.Response) {
+    let action: LoadMarvelDataViewAction
+    switch response.state {
+    case .error:
+      action = .showError(message: "Data could not be found")
+    case .success(let charactersResult):
+      let chatactersCellViewData = createCharactersCellViewData(data: charactersResult)
+      action = .showData(characters: chatactersCellViewData)
+    }
+    let viewModel = MarvelData.Characters.ViewModel(action: action)
+    viewController?.displayData(viewModel: viewModel)
+  }
+
+  // MARK: - Private
+
+  private func createCharactersCellViewData(data: [CharacterResult]) -> [CharactersCellViewData] {
+    var charactersCellViewData: [CharactersCellViewData] = []
+
+    data.forEach {
+      for result in $0.results {
+        charactersCellViewData.append(CharactersCellViewData(characterName: result.name,
+                                                             characterDescription: result.description,
+                                                             characterImage: createImageString(data: result.thumbnail)))
+      }
+    }
+    return charactersCellViewData
+  }
+
+  private func createImageString(data: Thumbnail?) -> String? {
+    guard let data = data,
+          let path = data.path,
+          let formato = data.formato else {
+      return nil
+    }
+
+    let finalPath = path + "." + formato
+    return finalPath
+  }
 }
+

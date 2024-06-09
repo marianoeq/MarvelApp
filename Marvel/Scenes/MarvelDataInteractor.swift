@@ -13,18 +13,39 @@
 import UIKit
 
 protocol MarvelDataBusinessLogic {
-
+  func doLoadData(request: MarvelData.Characters.Request)
 }
 
 protocol MarvelDataDataStore {
-  //var name: String { get set }
+  var charactersData: [CharacterResult]? { get set }
 }
 
 class MarvelDataInteractor: MarvelDataBusinessLogic, MarvelDataDataStore {
+
   var presenter: MarvelDataPresentationLogic?
-  var worker: MarvelDataWorker?
-  //var name: String = ""
-  
-  // MARK: Do something
-  
+
+  let networkManager = NetworkManager()
+
+  // MARK: - Properties - Data store
+
+  var charactersData: [CharacterResult]?
+
+// MARK: - Methods
+
+  func doLoadData(request: MarvelData.Characters.Request) {
+    networkManager.getMarvelCharacters() { [weak self] result in
+      guard let self = self else {
+        return
+      }
+      var state: LoadMarvelDataViewState
+      switch result {
+      case .success(let entity):
+        state = .success(charactersResult: entity)
+      case .failure(let error):
+        state = .error
+      }
+      let response = MarvelData.Characters.Response(state: state)
+      presenter?.presentData(response: response)
+    }
+  }
 }

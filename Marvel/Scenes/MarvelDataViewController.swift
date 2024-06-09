@@ -13,7 +13,7 @@
 import UIKit
 
 protocol MarvelDataDisplayLogic: AnyObject {
-
+  func displayData(viewModel: MarvelData.Characters.ViewModel)
 }
 
 class MarvelDataViewController: UIViewController {
@@ -22,10 +22,16 @@ class MarvelDataViewController: UIViewController {
 
   var interactor: MarvelDataBusinessLogic?
   var router: (MarvelDataRoutingLogic & MarvelDataDataPassing)?
+  var networkManager =  NetworkManager()
+
 
   // MARK: - Properties - Internal
 
   let sceneView = MarvelDataView()
+
+  // MARK: Properties
+
+  let testLabel = UILabel()
 
   // MARK: Object lifecycle
 
@@ -34,15 +40,10 @@ class MarvelDataViewController: UIViewController {
     setup()
   }
 
-  required init?(coder aDecoder: NSCoder)
-  {
+  required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     setup()
   }
-
-  // MARK: Properties
-
-  let testLabel = UILabel()
 
   // MARK: Setup
 
@@ -61,12 +62,45 @@ class MarvelDataViewController: UIViewController {
 
   // MARK: View lifecycle
 
-  override func viewDidLoad() {
+  override public func loadView() {
+    view = sceneView
+  }
+
+  override public func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .green
+    doLoadData()
+    setupNavigationBar()
+  }
+
+  // MARK: - Private
+
+  private func setupNavigationBar() {
+    navigationItem.title = "Marvel App"
   }
 }
 
+// MARK: - Output
+
+extension MarvelDataViewController {
+
+  func doLoadData() {
+    let request = MarvelData.Characters.Request()
+    interactor?.doLoadData(request: request)
+  }
+}
+
+// MARK: - Input
+
 extension MarvelDataViewController: MarvelDataDisplayLogic {
 
+  func displayData(viewModel: MarvelData.Characters.ViewModel) {
+    switch viewModel.action {
+    case .showData(let characters):
+      let data = MarvelListViewData(charactersList: characters)
+      sceneView.setState(state: .loaded(data: data))
+    case .showError(let message):
+      sceneView.setState(state: .error(message: message))
+    }
+  }
 }
+

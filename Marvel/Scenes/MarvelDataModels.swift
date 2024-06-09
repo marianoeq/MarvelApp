@@ -12,20 +12,32 @@
 
 import UIKit
 
-enum MarvelData
-{
-  // MARK: Use cases
-  
-  enum Something
-  {
-    struct Request
-    {
+enum MarvelData {
+  // MARK: - Use cases
+
+  enum Characters {
+    struct Request {
+
     }
-    struct Response
-    {
+    struct Response {
+      let state: LoadMarvelDataViewState
     }
-    struct ViewModel
-    {
+    struct ViewModel {
+      let action: LoadMarvelDataViewAction
     }
   }
+}
+
+// MARK: - Business models
+
+enum LoadMarvelDataViewState {
+  case error
+  case success(charactersResult: [CharacterResult])
+}
+
+// MARK: - View models
+
+enum LoadMarvelDataViewAction {
+  case showData(characters: [CharactersCellViewData])
+  case showError(message: String)
 }
