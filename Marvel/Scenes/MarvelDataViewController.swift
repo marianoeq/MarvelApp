@@ -75,14 +75,24 @@ class MarvelDataViewController: UIViewController {
   // MARK: - Private
 
   private func setupNavigationBar() {
-    navigationItem.title = "Marvel App"
+
+    let titleLabel = UILabel()
+    titleLabel.text = "Marvel App"
+    titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
+    titleLabel.sizeToFit()
+    let titleView = UIView(frame: titleLabel.bounds)
+    titleView.addSubview(titleLabel)
+    navigationItem.titleView = titleView
+
+    let icon = UIBarButtonItem(barButtonSystemItem: .search, target: nil, action: nil) /* Falta implementacion del filtrado*/
+    navigationItem.rightBarButtonItems = [icon]
   }
 }
 
 // MARK: - Output
 
 extension MarvelDataViewController {
-
+  
   func doLoadData() {
     let request = MarvelData.Characters.Request()
     interactor?.doLoadData(request: request)
